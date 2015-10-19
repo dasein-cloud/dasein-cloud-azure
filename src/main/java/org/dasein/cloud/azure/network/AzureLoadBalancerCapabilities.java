@@ -61,6 +61,26 @@ public class AzureLoadBalancerCapabilities extends AbstractCapabilities<Azure> i
         return 0;
     }
 
+    @Override
+    public int getMaxHealthCheckTimeout() throws CloudException, InternalException {
+        return 0;
+    }
+
+    @Override
+    public int getMinHealthCheckTimeout() throws CloudException, InternalException {
+        return 0;
+    }
+
+    @Override
+    public int getMaxHealthCheckInterval() throws CloudException, InternalException {
+        return 0;
+    }
+
+    @Override
+    public int getMinHealthCheckInterval() throws CloudException, InternalException {
+        return 0;
+    }
+
     /**
      * Gives the cloud provider's term for a load balancer (for example, "ELB" in AWS).
      *
@@ -96,6 +116,11 @@ public class AzureLoadBalancerCapabilities extends AbstractCapabilities<Azure> i
         return true;
     }
 
+    @Override
+    public boolean healthCheckRequiresListener() throws CloudException, InternalException {
+        return false;
+    }
+
     /**
      * Indicates whether a name is required when creating a health check
      *
@@ -106,6 +131,12 @@ public class AzureLoadBalancerCapabilities extends AbstractCapabilities<Azure> i
     @Override
     public Requirement healthCheckRequiresName() throws CloudException, InternalException {
         return null;
+    }
+
+    @Nonnull
+    @Override
+    public Requirement healthCheckRequiresPort() throws CloudException, InternalException {
+        return Requirement.REQUIRED;
     }
 
     /**

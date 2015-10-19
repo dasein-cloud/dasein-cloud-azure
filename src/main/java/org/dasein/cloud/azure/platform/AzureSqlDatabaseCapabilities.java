@@ -69,6 +69,11 @@ public class AzureSqlDatabaseCapabilities implements RelationalDatabaseCapabilit
     }
 
     @Override
+    public boolean supportsRootPasswordChange() throws CloudException, InternalException {
+        return false;
+    }
+
+    @Override
     public boolean supportsAlterDatabase() throws CloudException, InternalException {
         return false;
     }

@@ -16,7 +16,7 @@
  * ====================================================================
  */
 
-package org.dasein.cloud.azure.tests.compute.network;
+package org.dasein.cloud.azure.tests.network;
 
 import mockit.*;
 import org.dasein.cloud.CloudException;
@@ -44,6 +44,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static mockit.Deencapsulation.getField;
+import static mockit.Deencapsulation.invoke;
 import static org.junit.Assert.* ;
 import static org.junit.Assert.assertEquals;
 
@@ -175,8 +176,8 @@ public class AzureLoadBalancerSupportTest {
 
     @Test
     public void testAddServer() throws InternalException, JAXBException, CloudException {
-        new NonStrictExpectations(lbSupport){
-            {invoke(lbSupport, "getDefinition", LOAD_BALANCER_ID); result = expectedDefinitionModel; times = 1;}
+        new Expectations(lbSupport){
+           { invoke(lbSupport, "getDefinition", LOAD_BALANCER_ID); result = expectedDefinitionModel; times = 1;}
         };
 
         new MockUp<AzureMethod>(){
@@ -205,7 +206,7 @@ public class AzureLoadBalancerSupportTest {
 
         expectedDefinitionModel.getPolicy().getEndPoints().add(expectedEndPointToRemove);
 
-        new NonStrictExpectations(lbSupport){
+        new Expectations(lbSupport){
             {invoke(lbSupport, "getDefinition", LOAD_BALANCER_ID); result = expectedDefinitionModel; times = 1;}
         };
 
@@ -244,7 +245,7 @@ public class AzureLoadBalancerSupportTest {
     }
 
     @Test
-    @Ignore("This should pass when merge to develop due to bug fixed in LoadBalancerHealthCheck.getInstance")
+    //@Ignore("This should pass when merge to develop due to bug fixed in LoadBalancerHealthCheck.getInstance")
     public void testlistLBHealthChecks(@Injectable final HealthCheckFilterOptions optionsMoked) throws CloudException, InternalException {
         new NonStrictExpectations(lbSupport){
             {invoke(lbSupport, "getProfiles"); result = expectedProfilesModel; times = 1;}
@@ -264,14 +265,14 @@ public class AzureLoadBalancerSupportTest {
         assertEquals(String.valueOf(actualHC.getPort()), expectedMonitor.getPort());
         assertEquals(String.valueOf(actualHC.getInterval()), expectedMonitor.getIntervalInSeconds());
         assertEquals(String.valueOf(actualHC.getTimeout()), expectedMonitor.getTimeoutInSeconds());
-        //uncomment this when merge to develop
-        //assertEquals(String.valueOf(actualHC.getUnhealthyCount()), expectedMonitor.getToleratedNumberOfFailures());
+
+        assertEquals(String.valueOf(actualHC.getUnhealthyCount()), expectedMonitor.getToleratedNumberOfFailures());
         //assertEquals(actualHC.getHealthyCount(), 0);
         assertEquals(actualHC.getPath(), expectedMonitor.getHttpOptions().getRelativePath());
     }
 
     @Test
-    @Ignore("This should pass when merge to develop due to bug fixed in LoadBalancerHealthCheck.getInstance")
+    //@Ignore("This should pass when merge to develop due to bug fixed in LoadBalancerHealthCheck.getInstance")
     public void testGetLoadBalancerHealthCheck() throws CloudException, InternalException {
 
         new NonStrictExpectations(lbSupport){
@@ -285,8 +286,8 @@ public class AzureLoadBalancerSupportTest {
         assertEquals(String.valueOf(expectedLBHC.getPort()), expectedMonitor.getPort());
         assertEquals(String.valueOf(expectedLBHC.getInterval()), expectedMonitor.getIntervalInSeconds());
         assertEquals(String.valueOf(expectedLBHC.getTimeout()), expectedMonitor.getTimeoutInSeconds());
-        //uncomment this when merge to develop
-        //assertEquals(String.valueOf(expectedLBHC.getUnhealthyCount()), expectedMonitor.getToleratedNumberOfFailures());
+
+        assertEquals(String.valueOf(expectedLBHC.getUnhealthyCount()), expectedMonitor.getToleratedNumberOfFailures());
         //assertEquals(expectedLBHC.getHealthyCount(), 0);
         assertEquals(expectedLBHC.getPath(), expectedMonitor.getHttpOptions().getRelativePath());
     }
@@ -471,7 +472,7 @@ public class AzureLoadBalancerSupportTest {
         LbListener lbListener = LbListener.getInstance(LbAlgorithm.SOURCE, "", LbProtocol.HTTP, 12345, 12345);
 
         LoadBalancerCreateOptions options = LoadBalancerCreateOptions.getInstance(LOAD_BALANCER_ID, "testdescription");
-        options.withHealthCheckOptions(hcOptions).withVirtualMachines("endpoint1.cloudapp.net").havingListeners(lbListener);
+        options.withHealthCheckOptions(hcOptions).withVirtualMachines("endpoint1").havingListeners(lbListener);
 
         String lbName = lbSupport.createLoadBalancer(options);
 

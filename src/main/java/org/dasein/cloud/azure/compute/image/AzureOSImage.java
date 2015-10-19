@@ -117,7 +117,7 @@ public class AzureOSImage extends AbstractImageSupport<Azure> {
                 throw new CloudException("Virtual machine not found: " + options.getVirtualMachineId());
             }
 
-            if( !provider.getComputeServices().getImageSupport().getCapabilities().canImage(vm.getCurrentState()))
+            if( !getCapabilities().canImage(vm.getCurrentState()))
                 throw new InternalException("Virtual machine must be shut down before capture an image from it.");
 
             try {
@@ -270,7 +270,7 @@ public class AzureOSImage extends AbstractImageSupport<Azure> {
         final Iterable<MachineImage> allImages = getAllImages(false, true, false);
         for( MachineImage image : allImages)
         {
-            if("user".equalsIgnoreCase(image.getProviderOwnerId().toLowerCase()) && ctx.getRegionId().equalsIgnoreCase(image.getProviderRegionId().toLowerCase()))
+            if(ctx.getAccountNumber().equalsIgnoreCase(image.getProviderOwnerId().toLowerCase()) && ctx.getRegionId().equalsIgnoreCase(image.getProviderRegionId().toLowerCase()))
             {
                 list.add(new ResourceStatus(image.getProviderMachineImageId(), MachineImageState.ACTIVE));
             }
