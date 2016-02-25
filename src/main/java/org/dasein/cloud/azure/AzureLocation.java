@@ -259,7 +259,11 @@ public class AzureLocation implements DataCenterServices {
         }
         region.setActive(true);
         region.setAvailable(true);
-        region.setJurisdiction("US");
+        if(region.getProviderRegionId().contains("China")) {
+            region.setJurisdiction("CN");
+        } else {
+            region.setJurisdiction("US");
+        }
         return region;
     }
 
