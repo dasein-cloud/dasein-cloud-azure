@@ -19,6 +19,7 @@
 package org.dasein.cloud.azure.tests.network;
 
 import mockit.*;
+
 import org.dasein.cloud.CloudException;
 import org.dasein.cloud.CloudProvider;
 import org.dasein.cloud.InternalException;
@@ -35,10 +36,10 @@ import org.dasein.cloud.azure.network.model.ProfilesModel;
 import org.dasein.cloud.compute.VirtualMachine;
 import org.dasein.cloud.network.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.xml.bind.JAXBException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,7 +47,6 @@ import java.util.List;
 import static mockit.Deencapsulation.getField;
 import static mockit.Deencapsulation.invoke;
 import static org.junit.Assert.* ;
-import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Vlad_Munthiu on 6/10/2014.
@@ -66,21 +66,23 @@ public class AzureLoadBalancerSupportTest {
     @Mocked Azure azureMock;
     @Mocked AzureComputeServices azureComputeMoked;
     @Mocked AzureVM azureVMSupportMoked;
-
+    
     @Before
     public void setUp() {
 
         new NonStrictExpectations() {
             { azureMock.getContext(); result = providerContextMock; }
-            { azureMock.getComputeServices(); result = azureComputeMoked;}
-            { azureComputeMoked.getVirtualMachineSupport(); result = azureVMSupportMoked;}
+            { azureMock.getComputeServices(); result = azureComputeMoked; } 
+            { azureMock.getVirtualMachineEndpoint(); result = "cloudapp.net"; }
+            { azureMock.getTrafficManagerDomain(); result = "trafficmanager.net"; }
+            { azureComputeMoked.getVirtualMachineSupport(); result = azureVMSupportMoked; }
         };
 
         new NonStrictExpectations() {
             { providerContextMock.getAccountNumber(); result = ACCOUNT_NO; }
-            { providerContextMock.getEndpoint(); result = ENDPOINT;}
+            { providerContextMock.getEndpoint(); result = ENDPOINT; }
         };
-
+        
         expectedProfileModel = new ProfileModel();
         expectedProfileModel.setName(LOAD_BALANCER_ID);
         expectedProfileModel.setDomainName("myloadbalancerid.trafficmanager.net");
@@ -443,7 +445,8 @@ public class AzureLoadBalancerSupportTest {
                     assertEquals(postedDefinitionModel.getPolicy().getLoadBalancingMethod(), "Performance");
 
                     assertEquals(postedDefinitionModel.getPolicy().getEndPoints().size(), 1);
-                    assertEquals(postedDefinitionModel.getPolicy().getEndPoints().get(0).getDomainName(), "endpoint1.cloudapp.net");
+                    assertEquals(postedDefinitionModel.getPolicy().getEndPoints().get(0).getDomainName(), 
+                    		"endpoint1." + azureMock.getVirtualMachineEndpoint());
                     assertEquals(postedDefinitionModel.getPolicy().getEndPoints().get(0).getStatus(), "Enabled");
                     assertEquals(postedDefinitionModel.getPolicy().getEndPoints().get(0).getType(), "CloudService");
 
@@ -453,7 +456,8 @@ public class AzureLoadBalancerSupportTest {
                     ProfileModel profileModel = (ProfileModel)model;
                     assertNotNull(profileModel);
 
-                    assertEquals(profileModel.getDomainName(), String.format("%s.%s", LOAD_BALANCER_ID, azureMock.getTrafficManagerDomain()));
+                    assertEquals(profileModel.getDomainName(), String.format("%s.%s", 
+                    		LOAD_BALANCER_ID, azureMock.getTrafficManagerDomain()));
                     assertEquals(profileModel.getName(), LOAD_BALANCER_ID);
                 }
                 else
