@@ -57,7 +57,6 @@ public class AzureLoadBalancerSupport extends AbstractLoadBalancerSupport<Azure>
     public static final String RESOURCE_DEFINITION = "/services/WATM/profiles/%s/definitions/1";
 
     private volatile transient AzureLoadBalancerCapabilities capabilities;
-    public static final String TRAFFIC_MANAGER_DNS_NAME = "trafficmanager.net";
 
     public AzureLoadBalancerSupport(@Nonnull Azure provider) {
         super(provider);
@@ -113,7 +112,7 @@ public class AzureLoadBalancerSupport extends AbstractLoadBalancerSupport<Azure>
             throw new InternalException("Azure only supports HTTP and HTTPS protocol for HealthCheckOptions");
 
         ProfileModel profileModel = new ProfileModel();
-        profileModel.setDomainName(String.format("%s.%s", options.getName(), TRAFFIC_MANAGER_DNS_NAME));
+        profileModel.setDomainName(String.format("%s.%s", options.getName(), getProvider().getTrafficManagerDomain()));
         profileModel.setName(options.getName());
 
         AzureMethod azureMethod = new AzureMethod(this.getProvider());
@@ -169,7 +168,7 @@ public class AzureLoadBalancerSupport extends AbstractLoadBalancerSupport<Azure>
         {
             AzureRoleDetails azureRoleDetails = AzureRoleDetails.fromString(endPoint.getEndpointValue());
             DefinitionModel.EndPointModel endPointModel = new DefinitionModel.EndPointModel();
-            endPointModel.setDomainName(String.format("%s.cloudapp.net", azureRoleDetails.getRoleName()));
+            endPointModel.setDomainName(String.format("%s.%s", azureRoleDetails.getRoleName(), getProvider().getVirtualMachineEndpoint()));
             endPointModel.setStatus("Enabled");
             endPointModel.setType("CloudService");
             endPointsToAdd.add(endPointModel);
@@ -304,7 +303,7 @@ public class AzureLoadBalancerSupport extends AbstractLoadBalancerSupport<Azure>
 
             String[] parts = serverToAddId.split(":");
             DefinitionModel.EndPointModel endPointModel = new DefinitionModel.EndPointModel();
-            endPointModel.setDomainName(parts[0] + ".cloudapp.net");
+            endPointModel.setDomainName(String.format("%s.%s", parts[0], getProvider().getVirtualMachineEndpoint()));
             endPointModel.setStatus("Enabled");
             endPointModel.setType("CloudService");
             if(definitionModel.getPolicy().getEndPoints() == null)

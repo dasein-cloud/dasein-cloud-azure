@@ -453,7 +453,7 @@ public class AzureLoadBalancerSupportTest {
                     ProfileModel profileModel = (ProfileModel)model;
                     assertNotNull(profileModel);
 
-                    assertEquals(profileModel.getDomainName(), String.format("%s.%s", LOAD_BALANCER_ID, AzureLoadBalancerSupport.TRAFFIC_MANAGER_DNS_NAME));
+                    assertEquals(profileModel.getDomainName(), String.format("%s.%s", LOAD_BALANCER_ID, azureMock.getTrafficManagerDomain()));
                     assertEquals(profileModel.getName(), LOAD_BALANCER_ID);
                 }
                 else
