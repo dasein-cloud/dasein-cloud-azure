@@ -496,6 +496,8 @@ public class AzureSqlDatabaseSupport implements RelationalDatabaseSupport {
 
         } catch (CloudException e) {
             e.printStackTrace();
+        }  catch (InternalException e) {
+            throw new RuntimeException(e);
         }
 
         return backups;
@@ -559,7 +561,8 @@ public class AzureSqlDatabaseSupport implements RelationalDatabaseSupport {
         return new String[0];
     }
 
-    private ServerServiceResourceModel.Version getSubscriptionVersionProducts() throws CloudException {
+    private ServerServiceResourceModel.Version getSubscriptionVersionProducts() throws CloudException,
+            InternalException {
         HttpUriRequest subscriptionMetaRequest = new AzureSQLDatabaseSupportRequests(provider).subscriptionMetaRequest().build();
         ServerServiceResourceModel serverServiceResourceModel = new AzureRequester(this.provider, subscriptionMetaRequest).withXmlProcessor(ServerServiceResourceModel.class).execute();
 
@@ -571,7 +574,7 @@ public class AzureSqlDatabaseSupport implements RelationalDatabaseSupport {
         });
     }
 
-    private String getProductGUID(final DatabaseProduct product) throws CloudException {
+    private String getProductGUID(final DatabaseProduct product) throws CloudException, InternalException {
         ServerServiceResourceModel.Version versionResult = getSubscriptionVersionProducts();
 
         ServerServiceResourceModel.Edition edition = (ServerServiceResourceModel.Edition) CollectionUtils.find(versionResult.getEditions(), new Predicate() {

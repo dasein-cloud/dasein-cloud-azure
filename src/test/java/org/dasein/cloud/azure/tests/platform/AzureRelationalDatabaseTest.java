@@ -54,17 +54,17 @@ import org.junit.rules.TestName;
 
 public class AzureRelationalDatabaseTest extends AzureTestsBase {
 
-	private final String RESOURCE_SERVERS = "https://management.core.windows.net/%s/services/sqlservers/servers?contentview=generic";
-    private final String RESOURCE_SERVERS_NONGEN = "https://management.core.windows.net/%s/services/sqlservers/servers";
-    private final String RESOURCE_SERVER = "https://management.core.windows.net/%s/services/sqlservers/servers/%s";
-    private final String RESOURCE_DATABASES = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/databases";
-    private final String RESOURCE_DATABASE = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/databases/%s";
-    private final String RESOURCE_LIST_DATABASES = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/databases?contentview=generic";
-    private final String RESOURCE_SUBSCRIPTION_META = "https://management.core.windows.net/%s/services/sqlservers/subscriptioninfo";
-    private final String RESOURCE_LIST_RECOVERABLE_DATABASES = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/recoverabledatabases?contentview=generic";
-    private final String RESOURCE_RESTORE_DATABASE_OPERATIONS = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/restoredatabaseoperations";
-    private final String RESOURCE_SERVER_FIREWALL = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/firewallrules";
-    private final String RESOURCE_FIREWALL_RULE = "https://management.core.windows.net/%s/services/sqlservers/servers/%s/firewallrules/%s";
+	private final String RESOURCE_SERVERS = ENDPOINT + "%s/services/sqlservers/servers?contentview=generic";
+    private final String RESOURCE_SERVERS_NONGEN = ENDPOINT + "%s/services/sqlservers/servers";
+    private final String RESOURCE_SERVER = ENDPOINT + "%s/services/sqlservers/servers/%s";
+    private final String RESOURCE_DATABASES = ENDPOINT + "%s/services/sqlservers/servers/%s/databases";
+    private final String RESOURCE_DATABASE = ENDPOINT + "%s/services/sqlservers/servers/%s/databases/%s";
+    private final String RESOURCE_LIST_DATABASES = ENDPOINT + "%s/services/sqlservers/servers/%s/databases?contentview=generic";
+    private final String RESOURCE_SUBSCRIPTION_META = ENDPOINT + "%s/services/sqlservers/subscriptioninfo";
+    private final String RESOURCE_LIST_RECOVERABLE_DATABASES = ENDPOINT + "%s/services/sqlservers/servers/%s/recoverabledatabases?contentview=generic";
+    private final String RESOURCE_RESTORE_DATABASE_OPERATIONS = ENDPOINT + "%s/services/sqlservers/servers/%s/restoredatabaseoperations";
+    private final String RESOURCE_SERVER_FIREWALL = ENDPOINT + "%s/services/sqlservers/servers/%s/firewallrules";
+    private final String RESOURCE_FIREWALL_RULE = ENDPOINT + "%s/services/sqlservers/servers/%s/firewallrules/%s";
 	
 	private final String SERVER_ID = "TESTSERVER";
 	private final String DATABASE_ID = "TESTDATABASE";
