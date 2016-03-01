@@ -759,6 +759,9 @@ public class BlobStore extends AbstractBlobStoreSupport<Azure> {
             }
         }
         if( ok ) {
+        	if(isPublic(oldName, null)) {
+        		makePublic(newName);
+        	}
             removeBucket(oldName);
         }
         return newName;
