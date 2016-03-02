@@ -121,6 +121,9 @@ public class AzureAffinityGroupSupport implements AffinityGroupSupport {
         AzureMethod method = new AzureMethod(this.provider);
         final AffinityGroupModel affinityGroupModel = method.get(AffinityGroupModel.class, String.format(RESOURCE_AFFINITYGROUP, affinityGroupId));
 
+        if (affinityGroupModel == null) {
+            return null;
+        }
         //TODO see if name is enough to be used as an id
         return AffinityGroup.getInstance(affinityGroupModel.getName(),affinityGroupModel.getName(),affinityGroupModel.getDescription(), affinityGroupModel.getLocation(), null);
     }

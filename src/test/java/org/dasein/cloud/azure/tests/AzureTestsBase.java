@@ -41,7 +41,7 @@ public class AzureTestsBase {
     @Mocked protected Cloud cloudMock;
 
     //Global
-    protected final String ENDPOINT = "TESTENDPOINT";
+    protected final String ENDPOINT = "https://TESTENDPOINT/";
     protected final String ACCOUNT_NO = "TESTACCOUNTNO";
     protected final String REGION = "TESTREGION";
     protected final String STORAGE_ENDPOINT = "TESTSTORAGEENDPOINT";

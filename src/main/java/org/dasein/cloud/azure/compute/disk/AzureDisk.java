@@ -477,7 +477,7 @@ public class AzureDisk extends AbstractVolumeSupport {
         for( int i=0; i<entries.getLength(); i++ ) {
             Node entry = entries.item(i);
             Volume disk = toVolume(ctx, entry);
-            if( disk != null ) {
+            if( disk != null && (volumeFilterOptions == null || volumeFilterOptions.matches(disk))) {
                 disks.add(disk);
             }
         }
@@ -510,8 +510,8 @@ public class AzureDisk extends AbstractVolumeSupport {
 
             if( ctx == null ) {
                 throw new AzureConfigException("No context was specified for this request");
-            }                      
-            
+            }
+
             AzureMethod method = new AzureMethod(provider);
 
             long timeout = System.currentTimeMillis() + (CalendarWrapper.MINUTE * 10L);
