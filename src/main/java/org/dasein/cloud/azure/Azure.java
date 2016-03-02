@@ -371,6 +371,32 @@ public class Azure extends AbstractCloud {
             throw new CloudException(e.getMessage());
         }
     }
+    
+    public String getTrafficManagerDomain() {
+    	try {
+	    	if(getContext().getCloud().getEndpoint().endsWith(".cn")) {
+	    		return "trafficmanager.cn";
+	    	} else {
+	    		return "trafficmanager.net";
+	    	}
+    	} catch (Exception e) {
+    		logger.error("Failed to get traffic manager endpoint!");
+    		return null;
+    	}
+    }
+    
+    public String getVirtualMachineEndpoint() {
+    	try {
+	    	if(getContext().getCloud().getEndpoint().endsWith(".cn")) {
+	    		return "chinacloudapp.cn";
+	    	} else {
+	    		return "cloudapp.net";
+	    	}
+    	} catch (Exception e) {
+    		logger.error("Failed to get virtual machine endpoint!");
+    		return null;
+    	}
+    }
 }
 
 class RandomPasswordGenerator {
