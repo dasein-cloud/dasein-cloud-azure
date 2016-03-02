@@ -1,17 +1,38 @@
+/*
+ *  *
+ *  Copyright (C) 2009-2015 Dell, Inc.
+ *  See annotations for authorship information
+ *
+ *  ====================================================================
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *  http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  ====================================================================
+ *
+ */
+
 package org.dasein.cloud.azure.platform;
 
 import org.apache.http.client.methods.RequestBuilder;
 import org.dasein.cloud.InternalException;
 import org.dasein.cloud.ProviderContext;
 import org.dasein.cloud.azure.Azure;
-import org.dasein.cloud.azure.AzureConfigException;
-import org.dasein.cloud.azure.platform.model.CreateDatabaseRestoreModel;
+import org.dasein.cloud.azure.platform.model.CreateDatabaseRecoveryModel;
 import org.dasein.cloud.azure.platform.model.DatabaseServiceResourceModel;
 import org.dasein.cloud.azure.platform.model.ServerModel;
 import org.dasein.cloud.azure.platform.model.ServerServiceResourceModel;
 import org.dasein.cloud.util.requester.entities.DaseinObjectToXmlEntity;
 
-import java.net.*;
+import java.net.URI;
+import java.net.URL;
 
 /**
  * Created by Vlad_Munthiu on 11/19/2014.
@@ -28,6 +49,7 @@ public class AzureSQLDatabaseSupportRequests{
     private final String RESOURCE_SUBSCRIPTION_META = "/services/sqlservers/subscriptioninfo";
     private final String RESOURCE_LIST_RECOVERABLE_DATABASES = "/services/sqlservers/servers/%s/recoverabledatabases?contentview=generic";
     private final String RESOURCE_RESTORE_DATABASE_OPERATIONS = "/services/sqlservers/servers/%s/restoredatabaseoperations";
+    private final String RESOURCE_RECOVERY_DATABASE_OPERATIONS = "/services/sqlservers/servers/%s/recoverdatabaseoperations";
     private final String RESOURCE_SERVER_FIREWALL = "/services/sqlservers/servers/%s/firewallrules";
     private final String RESOURCE_FIREWALL_RULE = "/services/sqlservers/servers/%s/firewallrules/%s";
 
@@ -74,11 +96,11 @@ public class AzureSQLDatabaseSupportRequests{
     }
 
     public RequestBuilder createDatabaseFromBackup(String serverName,
-            CreateDatabaseRestoreModel createDatabaseRestoreModel) throws InternalException {
+            CreateDatabaseRecoveryModel createDatabaseRecoveryModel) throws InternalException {
         RequestBuilder requestBuilder = RequestBuilder.post();
         addAzureCommonHeaders(requestBuilder);
-        requestBuilder.setUri(String.format(getEndpoint() + RESOURCE_RESTORE_DATABASE_OPERATIONS, serverName));
-        requestBuilder.setEntity(new DaseinObjectToXmlEntity<CreateDatabaseRestoreModel>(createDatabaseRestoreModel));
+        requestBuilder.setUri(String.format(getEndpoint() + RESOURCE_RECOVERY_DATABASE_OPERATIONS, serverName));
+        requestBuilder.setEntity(new DaseinObjectToXmlEntity<CreateDatabaseRecoveryModel>(createDatabaseRecoveryModel));
         return requestBuilder;
     }
 
